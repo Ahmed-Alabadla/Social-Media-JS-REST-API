@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Social Media | Profile</title>
+    <link href="./output.css" rel="stylesheet" />
+    <style>
+      ::-webkit-file-upload-button {
+        -webkit-appearance: button;
+        font: inherit;
+        padding: 10px;
+        border-radius: 8px 0 0 8px;
+        border: 0;
+      }
+
+      /* ==================== LOADER STYLE ==================== */
+
+      .lds-roller,
+      .lds-roller div,
+      .lds-roller div:after {
+        box-sizing: border-box;
+      }
+      .lds-roller {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+      }
+      .lds-roller div {
+        animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        transform-origin: 40px 40px;
+      }
+      .lds-roller div:after {
+        content: " ";
+        display: block;
+        position: absolute;
+        width: 7.2px;
+        height: 7.2px;
+        border-radius: 50%;
+        background: #0ea5e9;
+        margin: -3.6px 0 0 -3.6px;
+      }
+      .lds-roller div:nth-child(1) {
+        animation-delay: -0.036s;
+      }
+      .lds-roller div:nth-child(1):after {
+        top: 62.62742px;
+        left: 62.62742px;
+      }
+      .lds-roller div:nth-child(2) {
+        animation-delay: -0.072s;
+      }
+      .lds-roller div:nth-child(2):after {
+        top: 67.71281px;
+        left: 56px;
+      }
+      .lds-roller div:nth-child(3) {
+        animation-delay: -0.108s;
+      }
+      .lds-roller div:nth-child(3):after {
+        top: 70.90963px;
+        left: 48.28221px;
+      }
+      .lds-roller div:nth-child(4) {
+        animation-delay: -0.144s;
+      }
+      .lds-roller div:nth-child(4):after {
+        top: 72px;
+        left: 40px;
+      }
+      .lds-roller div:nth-child(5) {
+        animation-delay: -0.18s;
+      }
+      .lds-roller div:nth-child(5):after {
+        top: 70.90963px;
+        left: 31.71779px;
+      }
+      .lds-roller div:nth-child(6) {
+        animation-delay: -0.216s;
+      }
+      .lds-roller div:nth-child(6):after {
+        top: 67.71281px;
+        left: 24px;
+      }
+      .lds-roller div:nth-child(7) {
+        animation-delay: -0.252s;
+      }
+      .lds-roller div:nth-child(7):after {
+        top: 62.62742px;
+        left: 17.37258px;
+      }
+      .lds-roller div:nth-child(8) {
+        animation-delay: -0.288s;
+      }
+      .lds-roller div:nth-child(8):after {
+        top: 56px;
+        left: 12.28719px;
+      }
+      @keyframes lds-roller {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+
+    <script src="../node_modules/axios/dist/axios.min.js"></script>
+  </head>
+  <body class="bg-[#F4F8F9]">
+    <div class="relative container w-full min-h-screen">
+      <!-- ======== LOADER ======== -->
+      <div
+        id="loader"
+        class="lds-roller !fixed top-72 z-10 left-1/2 !w-28 !h-28 p-4 rounded-2xl bg-gray-100 bg-opacity-70"
+      >
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <!-- START NAVBAR -->
+      <div
+        class="relative bg-white flex items-center justify-between px-2 py-3 shadow-lg"
+      >
+        <a href="/src/home.html" class="text-lg font-semibold">Tarmeez</a>
+        <div
+          class="border bg-teal-5002 w-11 h-11 rounded-full flex items-center justify-center text-2xl cursor-pointer mr-6"
+          id="userDetailsButton"
+          onclick="handleClickBtnUserDetails()"
+        >
+          <img
+            src="../assets/person.png"
+            alt="person"
+            id="person-picture"
+            class="rounded-full"
+          />
+        </div>
+        <!-- ======== USER DETAILS ======== -->
+        <div
+          id="userDetails"
+          class="hidden z-10 absolute p-5 flex-col justify-center items-center bg-white w-64 mx-auto rounded-xl shadow-lg after:absolute top-0 right-0 after:top-0 translate-y-20 after:right-10 after:w-5 after:h-5 after:border-[12px] after:border-transparent after:-translate-y-6 after:border-b-white"
+        >
+          <button
+            id="change-picture"
+            class="w-12 h-12 rounded-full bg-orange-600 text-white flex items-center justify-center mb-2.5"
+          >
+            <img src="../assets/camera.png" alt="" srcset="" class="w-8 h-8" />
+          </button>
+          <p
+            id="userDetail-name"
+            class="cursor-pointer"
+            onclick="handleClickBtnProfilePage()"
+          >
+            Ahmed Alabadla
+          </p>
+          <p class="text-[#7A7A7A] mb-5" id="userDetail-email">
+            amro-zaqout@gmail.com
+          </p>
+          <button
+            class="bg-[#E7E8FC] text-[#6541DF] rounded-full px-10 py-1.5 mb-3"
+            id="logout"
+          >
+            Log out
+          </button>
+        </div>
+        <!-- ======== LOGIN / REGISTER ======== -->
+        <div
+          id="login&register"
+          class="hidden z-10 absolute p-5 flex-col justify-center items-center bg-white w-64 mx-auto rounded-xl shadow-lg after:absolute top-0 right-0 after:top-0 translate-y-20 after:right-10 after:w-5 after:h-5 after:border-[12px] after:border-transparent after:-translate-y-6 after:border-b-white"
+        >
+          <button
+            class="bg-[#E7E8FC] text-[#6541DF] rounded-full px-10 py-1.5 mb-3"
+            id="loginButton"
+          >
+            Login
+          </button>
+          <button
+            id="registerButton"
+            class="bg-[#E7E8FC] text-[#6541DF] rounded-full px-10 py-1.5"
+          >
+            Register
+          </button>
+        </div>
+
+        <!-- ======== Login modal ======== -->
+        <div
+          class="hidden absolute top-16 right-0 p-4 w-full max-w-md max-h-full"
+          id="authentication-login"
+        >
+          <!-- Modal content -->
+          <div class="relative bg-white rounded-lg shadow">
+            <!-- Modal header -->
+            <div
+              class="flex items-center justify-between p-4 md:p-5 border-b rounded-t"
+            >
+              <h3 class="text-xl font-semibold text-gray-900">Sign in</h3>
+              <button
+                type="button"
+                class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
+                id="closeButtonLogin"
+              >
+                <svg
+                  class="w-3 h-3"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 14 14"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                  />
+                </svg>
+                <span class="sr-only">Close modal</span>
+              </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-4 md:p-5">
+              <div
+                class="hidden bg-red-500 p-2.5 w-full text-white rounded-lg text-sm mb-2"
+                id="loginError"
+              >
+                login error
+              </div>
+              <form class="space-y-4" id="login-form" method="POST">
+                <div>
+                  <label
+                    for="username-login"
+                    class="block mb-2 text-sm font-medium text-gray-900"
+                    >Your username</label
+                  >
+                  <input
+                    type="text"
+                    name="username"
+                    id="username-login"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-1 focus:ring-sky-500 focus:outline-none focus:border-sky-500 block w-full p-2.5"
+                    placeholder="username"
+                    required
+                  />
+                </div>
+                <div>
+                  <label
+                    for="password-login"
+                    class="block mb-2 text-sm font-medium text-gray-900"
+                    >Your password</label
+                  >
+                  <input
+                    type="password"
+                    name="password"
+                    id="password-login"
+                    placeholder="••••••••"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-1 focus:ring-sky-500 focus:outline-none focus:border-sky-500 block w-full p-2.5"
+                    required
+                  />
+                </div>
+
+                <button
+                  onclick="loginBtnClick()"
+                  type="button"
+                  class="w-full text-white bg-sky-700 hover:bg-sky-800 focus:ring-4 focus:outline-none focus:ring-sky-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                >
+                  Login to your account
+                </button>
+                <div class="text-sm font-medium text-gray-500">
+                  Not registered?
+                  <button
+                    id="createAccount"
+                    class="text-sky-700 hover:underline"
+                  >
+                    Create account
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- ======== Register modal ======== -->
+        <div
+          class="hidden absolute top-16 right-0 p-4 w-full max-w-md max-h-full z-10"
+          id="authentication-register"
+        >
+          <!-- Modal content -->
+          <div class="relative bg-white rounded-lg shadow">
+            <!-- Modal header -->
+            <div
+              class="flex items-center justify-between p-4 md:p-5 border-b rounded-t"
+            >
+              <h3 class="text-xl font-semibold text-gray-900">Sign up</h3>
+              <button
+                type="button"
+                class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
+                id="closeButtonRegister"
+              >
+                <svg
+                  class="w-3 h-3"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 14 14"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                  />
+                </svg>
+                <span class="sr-only">Close modal</span>
+              </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-4 md:p-5">
+              <form class="space-y-4" method="post" id="register-form">
+                <div
+                  class="hidden bg-red-500 p-4 w-full text-white rounded-lg text-sm"
+                  id="register-error"
+                ></div>
+                <div>
+                  <label
+                    for="name"
+                    class="block mb-2 text-sm font-medium text-gray-900"
+                    >Your name</label
+                  >
+                  <input
+                    type="text"
+                    name="name"
+                    id="name"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 focus:outline-none focus:ring-1 block w-full p-2.5"
+                    placeholder="name"
+                    required
+                  />
+                </div>
+                <div>
+                  <label
+                    for="username"
+                    class="block mb-2 text-sm font-medium text-gray-900"
+                    >Your username</label
+                  >
+                  <input
+                    type="text"
+                    name="username"
+                    id="username"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 focus:outline-none focus:ring-1 block w-full p-2.5"
+                    placeholder="username"
+                    required
+                  />
+                </div>
+                <div>
+                  <label
+                    for="email-register"
+                    class="block mb-2 text-sm font-medium text-gray-900"
+                    >Your email</label
+                  >
+                  <input
+                    type="email"
+                    name="email"
+                    id="email-register"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 focus:outline-none focus:ring-1 block w-full p-2.5"
+                    placeholder="name@company.com"
+                    required
+                  />
+                </div>
+                <div>
+                  <label
+                    for="password-regiter"
+                    class="block mb-2 text-sm font-medium text-gray-900"
+                    >Your password</label
+                  >
+                  <input
+                    type="password"
+                    name="password"
+                    id="password-regiter"
+                    placeholder="••••••••"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 focus:outline-none focus:ring-1 block w-full p-2.5"
+                    required
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block mb-2 text-sm font-medium text-gray-900"
+                    for="user_picture"
+                    >Upload file</label
+                  >
+                  <input
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 focus:outline-none focus:ring-1 block w-full"
+                    id="user_picture"
+                    type="file"
+                    name="image"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  class="w-full text-white bg-sky-700 hover:bg-sky-800 focus:ring-4 focus:outline-none focus:ring-sky-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                >
+                  Register
+                </button>
+                <div class="text-sm font-medium text-gray-500">
+                  You have account?
+                  <button id="signUp" class="text-sky-700 hover:underline">
+                    Login
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END NAVBAR -->
+
+      <!-- START MAIN -->
+
+      <p class="mt-6 text-2xl font-medium" id="author-name">
+        Ahmed Alabadala Post
+      </p>
+      <!-- =========== POST Details =========== -->
+      <div class="bg-white rounded-md shadow-sm mt-6 mb-3">
+        <!-- header post -->
+        <div class="flex items-center gap-3 p-2">
+          <img
+            src="../assets/person.png"
+            alt="person image"
+            class="w-10 h-10 rounded-full border"
+            id="post-author-image"
+          />
+          <p class="font-medium" id="post-author-name">Ahmed Alabadla</p>
+        </div>
+        <!-- image post -->
+        <div class="p-2.5 pb-0 border-t" id="post-image-container">
+          <img
+            src="../assets/post1.png"
+            alt=""
+            class="w-full h-full rounded"
+            id="post-image"
+          />
+        </div>
+
+        <!-- footer post  -->
+        <div class="flex flex-col gap-1 p-2.5">
+          <p class="text-gray-400 text-sm font-medium" id="post-created_at">
+            4 day ago
+          </p>
+          <p class="text-gray-800 text-lg font-medium" id="post-title">Title</p>
+          <p class="text-gray-800" id="post-body">
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+            Distinctio, harum. Lorem, ipsum dolor sit amet consectetur
+            adipisicing elit. Distinctio, harum.
+          </p>
+          <hr class="border-t-2 my-2" />
+          <div class="flex items-center gap-3 flex-wrap">
+            <!-- comments -->
+            <div class="text-gray-500 cursor-pointer" id="commentsButton">
+              (<span id="post-comments_count">2</span>) comments
+            </div>
+
+            <!-- tags -->
+            <div class="flex items-center gap-1 flex-wrap" id="post-tags">
+              <p class="px-2 py-1 bg-gray-500 text-white rounded-full">
+                #gaza_under_attack
+              </p>
+            </div>
+          </div>
+          <hr class="border-t-2 my-2" />
+          <!-- Comments Details -->
+          <div class="flex flex-col gap-1.5">
+            <!-- add comment -->
+
+            <div id="post-comments" class="flex flex-col gap-1.5"></div>
+            <div class="mt-2">
+              <div
+                class="hidden bg-red-500 p-2.5 w-full text-white rounded-lg text-sm mb-2"
+                id="addCommentError"
+              >
+                error
+              </div>
+              <form
+                class="flex items-center gap-1"
+                method="post"
+                id="comment-form"
+              >
+                <input
+                  type="text"
+                  name="comment"
+                  id="comment-body"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 focus:outline-none focus:ring-1 block w-full p-2.5"
+                  placeholder="comment..."
+                  required
+                />
+
+                <button
+                  type="button"
+                  onclick="handleClickBtnAddComment()"
+                  class="text-white bg-sky-700 hover:bg-sky-800 focus:ring-4 focus:outline-none focus:ring-sky-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                >
+                  Add
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- END MAIN -->
+  </body>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    let id = urlParams.get("postId");
+    console.log("postId : ", id);
+    toggleLoader(true);
+
+    axios
+      .get(`https://tarmeezacademy.com/api/v1/posts/${id}`, {
+        headers: {
+          Accept: "application/json",
+        },
+      })
+      .then((res) => {
+        toggleLoader(false);
+
+        console.log(res.data.data);
+        const postDetails = res.data.data;
+
+        document.getElementById("author-name").innerHTML =
+          postDetails.author.username + " Post";
+
+        document.getElementById("post-author-name").innerHTML =
+          postDetails.author.username;
+
+        if (Object.keys(postDetails.author.profile_image).length !== 0) {
+          document.getElementById("post-author-image").src =
+            postDetails.author.profile_image;
+        }
+
+        if (Object.keys(postDetails.image).length !== 0) {
+          document.getElementById("post-image").src = postDetails.image;
+        } else {
+          document
+            .getElementById("post-image-container")
+            .classList.add("hidden");
+        }
+
+        postDetails.title
+          ? (document.getElementById("post-title").innerHTML =
+              postDetails.title)
+          : (document.getElementById("post-title").innerHTML = "");
+
+        document.getElementById("post-created_at").innerHTML =
+          postDetails.created_at;
+
+        document.getElementById("post-body").innerHTML = postDetails.body;
+
+        document.getElementById("post-comments_count").innerHTML =
+          postDetails.comments_count;
+
+        postDetails.tags.map((tag) => {
+          let tagsContent = `
+            <p class="px-2 py-1 bg-gray-500 text-white rounded-full">
+                ${tag.name}
+            </p>
+          `;
+          document.getElementById("post-tags").innerHTML += tagsContent;
+        });
+
+        postDetails.comments.map((comment) => {
+          // post-comments
+          // console.log(comment);
+          let profileImageElement = "../assets/person.png";
+          if (Object.keys(comment.author.profile_image).length !== 0) {
+            profileImageElement = comment.author.profile_image;
+          }
+          let commentContent = `
+            <div class="p-2 py-3 bg-gray-200 rounded-md flex flex-col gap-1.5">
+              <!-- user -->
+              <div class="flex items-center gap-1.5 w-fit cursor-pointer" onclick="handleClickBtnUserComment(${comment.author.id})">
+                <img
+                  src=${profileImageElement}
+                  alt="person image"
+                  class="w-8 h-8 rounded-full border border-gray-50"
+                />
+                <p class="font-medium text-sm">${comment.author.username}</p>
+              </div>
+              <!-- comment -->
+              <p class="text-sm">
+                ${comment.body}
+              </p>
+            </div>
+          `;
+          document.getElementById("post-comments").innerHTML =
+            commentContent + document.getElementById("post-comments").innerHTML;
+        });
+      });
+
+    function handleClickBtnUserComment(id) {
+      window.location = `profile.html?userId=${id}`;
+    }
+
+    // ========= user details ========
+
+    const userDetails = JSON.parse(localStorage.getItem("user"));
+    console.log(userDetails);
+
+    if (userDetails) {
+      document.getElementById("userDetail-name").innerHTML = userDetails.name;
+      document.getElementById("userDetail-email").innerHTML = userDetails.email;
+
+      if (Object.keys(userDetails.profile_image).length !== 0) {
+        document.getElementById("person-picture").src =
+          userDetails.profile_image;
+      }
+    }
+
+    function handleClickBtnProfilePage() {
+      window.location = `profile.html?userId=${userDetails.id}`;
+    }
+
+    // ========== when click button user details ==========
+
+    function handleClickBtnUserDetails() {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const userDetails = document.getElementById("userDetails");
+        if (userDetails.classList.contains("hidden")) {
+          userDetails.classList.remove("hidden");
+          userDetails.classList.add("flex");
+        } else {
+          userDetails.classList.remove("flex");
+          userDetails.classList.add("hidden");
+        }
+        setTimeout(() => {
+          userDetails.classList.remove("flex");
+          userDetails.classList.add("hidden");
+        }, 10000);
+      } else {
+        const auth = document.getElementById("login&register");
+        if (auth.classList.contains("hidden")) {
+          auth.classList.remove("hidden");
+          auth.classList.add("flex");
+        } else {
+          auth.classList.remove("flex");
+          auth.classList.add("hidden");
+        }
+        setTimeout(() => {
+          auth.classList.remove("flex");
+          auth.classList.add("hidden");
+        }, 10000);
+      }
+    }
+
+    // =====================================================
+
+    // ============= Add Comments ==============
+
+    function handleClickBtnAddComment() {
+      let commentBody = document.getElementById("comment-body").value;
+      let token = localStorage.getItem("token");
+
+      if (commentBody === "") {
+        document.getElementById("addCommentError").classList.remove("hidden");
+        document.getElementById("addCommentError").innerHTML =
+          "Place Enter a comment";
+      } else {
+        document.getElementById("addCommentError").classList.add("hidden");
+        let id = Number(
+          location.search.slice(location.search.indexOf("=") + 1)
+        );
+        toggleLoader(true);
+        axios
+          .post(
+            `https://tarmeezacademy.com/api/v1/posts/${id}/comments`,
+            {
+              body: commentBody,
+            },
+            {
+              headers: {
+                Accept: "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
+          .then((res) => {
+            let comment = res.data.data;
+            document.getElementById("comment-body").value = "";
+
+            let profileImageElement = "../assets/person.png";
+            if (Object.keys(comment.author.profile_image).length !== 0) {
+              profileImageElement = comment.author.profile_image;
+            }
+            let commentContent = `
+            <div class="p-2 py-3 bg-gray-200 rounded-md flex flex-col gap-1.5">
+              <!-- user -->
+              <div class="flex items-center gap-1.5 w-fit cursor-pointer" onclick="handleClickBtnUserComment(${comment.author.id})">
+                <img
+                  src=${profileImageElement}
+                  alt="person image"
+                  class="w-8 h-8 rounded-full border border-gray-50"
+                />
+                <p class="font-medium text-sm">${comment.author.username}</p>
+              </div>
+              <!-- comment -->
+              <p class="text-sm">
+                ${comment.body}
+              </p>
+            </div>
+          `;
+            document.getElementById("post-comments").innerHTML =
+              commentContent +
+              document.getElementById("post-comments").innerHTML;
+            toggleLoader(false);
+          })
+          .catch((err) => {
+            document
+              .getElementById("addCommentError")
+              .classList.remove("hidden");
+            document.getElementById("addCommentError").innerHTML =
+              err.response.data.message;
+          });
+      }
+    }
+
+    // ========================== LOADER ==========================
+
+    function toggleLoader(show = true) {
+      if (show) {
+        document.getElementById("loader").style.visibility = "visible";
+      } else {
+        document.getElementById("loader").style.visibility = "hidden";
+      }
+    }
+  </script>
+  <!-- ====== login script ====== -->
+  <script src="./login.js"></script>
+  <!-- ====== register script ====== -->
+  <script src="./register.js"></script>
+  <!-- ====== logout script ====== -->
+  <script src="./logout.js"></script>
+</html>
